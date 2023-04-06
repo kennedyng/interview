@@ -1,13 +1,9 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import { Button, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { loader as selectorLoader, TermsPage } from "./pages/terms";
 import ViewsPage from "./pages/views";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
+import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
 const router = createBrowserRouter([
