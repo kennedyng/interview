@@ -50,3 +50,5 @@ app.listen(process.env.PORT || port, () => {
     `Test App running at http://localhost:${process.env.PORT || port}`
   );
 });
+
+module.exports = app;
