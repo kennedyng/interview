@@ -18,7 +18,7 @@ import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { Field, useFormik } from "formik";
 import SaveIcon from "@mui/icons-material/Save";
-import { sxMainContent } from "./styles";
+import { sxMainContent, sxPaper } from "./styles";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -34,15 +34,6 @@ const MenuProps = {
     },
   },
 };
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const API_URL = "https://interview-ken8.vercel.app";
 
@@ -77,7 +68,7 @@ const DetailsForm = () => {
         .max(50, "Must be 15 characters or less")
         .min(2, "Must contain atleast two characters")
         .required("*Required"),
-      selectors: Yup.array().required("Required"),
+      selectors: Yup.array().min(1, "Select Atleast One Selector").required(),
       terms: Yup.boolean().oneOf([true]),
     }),
   });
@@ -191,7 +182,7 @@ export const TermsPage = () => {
         alignItems="center"
         sx={sxMainContent}
       >
-        <Paper sx={{ p: 4, boxShadow: "4", maxWidth: 400 }}>
+        <Paper sx={sxPaper}>
           <Typography
             component={Paper}
             variant="h6"
