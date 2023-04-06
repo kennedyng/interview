@@ -49,8 +49,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const API_URL =
-  "https://interview-ken8-eo7rg5zh4-kennedyngosachanda-gmailcom.vercel.app";
+const API_URL = "https://interview-ken8.vercel.app";
 
 const DetailsForm = () => {
   const data = useLoaderData();
