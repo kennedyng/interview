@@ -25,6 +25,7 @@ app.get("/data", async (req, res) => {
     });
     res.status(200).json(data);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "some thing went wrong" });
   }
 });
@@ -41,7 +42,7 @@ app.post("/user/create/details", async (req, res) => {
 
     res.status(201).json({ message: "created successfully" });
   } catch (error) {
-    console.log(error);
+    res.json(500);
   }
 });
 
