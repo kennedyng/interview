@@ -1,20 +1,15 @@
 import {
   Button,
   Checkbox,
-  Chip,
   FormControl,
   FormControlLabel,
-  FormGroup,
   FormHelperText,
-  FormLabel,
   Grid,
   InputLabel,
   ListSubheader,
   MenuItem,
-  OutlinedInput,
   Paper,
   Select,
-  Stack,
   TextField,
   Typography,
   useTheme,
@@ -49,15 +44,15 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const API_URL = "https://interview-ken8.vercel.app";
+// const API_URL = "https://interview-ken8.vercel.app";
+const API_URL = "http://localhost:8080";
 
 const DetailsForm = () => {
   const data = useLoaderData();
+  const [category1, category2, category3] = data;
 
-  console.log("data", data);
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -113,27 +108,29 @@ const DetailsForm = () => {
       >
         <InputLabel id="selector-label-id">Selectors</InputLabel>
         <Select
-          labelId="selector-id"
-          id="selectors"
-          name="selectors"
           multiple
           value={formik.values.selectors}
           onChange={formik.handleChange}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
+          id="selectors"
+          name="selectors"
+          label="selectors"
         >
-          {data.map(({ id, name, departments }) => (
-            <MenuItem
-              key={id}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
+          <ListSubheader>{category1.name}</ListSubheader>
+          {category1.departments.map(({ id, name, products }) => (
+            <MenuItem value={name} key={id}>
+              {name}
+            </MenuItem>
+          ))}
+
+          <ListSubheader>{category2.name}</ListSubheader>
+          {category2.departments.map(({ id, name, products }) => (
+            <MenuItem value={name} key={id}>
+              {name}
+            </MenuItem>
+          ))}
+          <ListSubheader>{category3.name}</ListSubheader>
+          {category3.departments.map(({ id, name }) => (
+            <MenuItem value={name} key={id}>
               {name}
             </MenuItem>
           ))}
@@ -170,7 +167,7 @@ const DetailsForm = () => {
 
       <Box textAlign="center">
         <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
-          {isSubmitting ? "Saving..." : "Save"}
+          Save
         </Button>
       </Box>
     </form>
