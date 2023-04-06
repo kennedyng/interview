@@ -20,13 +20,14 @@ import {
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
 import { Field, useFormik } from "formik";
 import SaveIcon from "@mui/icons-material/Save";
 import { sxMainContent } from "./styles";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLoaderData } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -38,19 +39,6 @@ const MenuProps = {
     },
   },
 };
-
-const names = [
-  "Oliver Hansen",
-  "Van Henrsy",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
 
 function getStyles(name, personName, theme) {
   return {
@@ -64,8 +52,10 @@ function getStyles(name, personName, theme) {
 const API_URL = "http://localhost:8080";
 
 const DetailsForm = () => {
-  const theme = useTheme();
+  const data = useLoaderData();
 
+  console.log("data", data);
+  const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const formik = useFormik({
@@ -138,9 +128,9 @@ const DetailsForm = () => {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {data.map(({ id, name, departments }) => (
             <MenuItem
-              key={name}
+              key={id}
               value={name}
               style={getStyles(name, personName, theme)}
             >
@@ -148,6 +138,7 @@ const DetailsForm = () => {
             </MenuItem>
           ))}
         </Select>
+
         <FormHelperText>
           {Boolean(formik.errors.selectors) && formik.errors.selectors}
         </FormHelperText>
@@ -229,3 +220,12 @@ export const TermsPage = () => {
     </Grid>
   );
 };
+
+export async function loader() {
+  const res = await fetch(`${API_URL}/data`);
+  if (res.status === 500) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  return res.json();
+}

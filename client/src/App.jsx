@@ -4,7 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { Button, CssBaseline } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { TermsPage } from "./pages/terms";
+import { loader as selectorLoader, TermsPage } from "./pages/terms";
 import ViewsPage from "./pages/views";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
@@ -16,6 +16,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        errorElement: <div>Something went wrong</div>,
+        loader: selectorLoader,
         element: <TermsPage />,
       },
       {

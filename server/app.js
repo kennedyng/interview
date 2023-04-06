@@ -12,9 +12,17 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get("/", async (req, res) => {
+app.get("/data", async (req, res) => {
   try {
-    const data = await prisma.category.findMany({});
+    const data = await prisma.category.findMany({
+      include: {
+        departments: {
+          include: {
+            products: true,
+          },
+        },
+      },
+    });
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "some thing went wrong" });
