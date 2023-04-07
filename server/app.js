@@ -30,6 +30,37 @@ app.get("/data", async (req, res) => {
   }
 });
 
+app.get("/user/data/:userId", async (req, res) => {
+  try {
+    const userData = await prisma.user.findMany({
+      include: {
+        selectors: true,
+      },
+      where: {
+        id: Number(req.params.userId),
+      },
+    });
+
+    if (userData.length) {
+      const data = await prisma.category.findMany({
+        include: {
+          departments: {
+            include: {
+              products: true,
+            },
+          },
+        },
+      });
+      res.status(200).json({ userData, data });
+    } else {
+      res.status(404).json({ message: "user not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "some thing went wrong" });
+  }
+});
+
 app.post("/user/create/details", async (req, res) => {
   try {
     created = await prisma.user.create({
@@ -37,6 +68,13 @@ app.post("/user/create/details", async (req, res) => {
         firstName: req.body.name.split(" ")[0],
         lastName: req.body.name.split(" ")[1],
         agreed: Boolean(req.body.agreed),
+        selectors: {
+          create: req.body.selectors.map((selectors) => {
+            return {
+              name: selectors,
+            };
+          }),
+        },
       },
     });
 

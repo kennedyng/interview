@@ -1,23 +1,26 @@
 import "./App.css";
 import { CssBaseline } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { loader as selectorLoader, TermsPage } from "./pages/terms";
-import ViewsPage from "./pages/views";
+import { loader as termsLoader, TermsPage } from "./pages/terms";
+import ViewsPage, { loader as editLoader } from "./pages/views";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
+import RootLayout from "./layout/RootLayout";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <RootLayout />,
     children: [
       {
         index: true,
         errorElement: <div>Something went wrong</div>,
-        loader: selectorLoader,
+        loader: termsLoader,
         element: <TermsPage />,
       },
       {
-        path: "views",
+        path: "views/user/edit/:userId",
+        loader: editLoader,
         element: <ViewsPage />,
       },
     ],

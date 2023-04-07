@@ -1,29 +1,32 @@
 import {
   Button,
   Checkbox,
+  Collapse,
   FormControl,
   FormControlLabel,
   FormHelperText,
   Grid,
+  IconButton,
   InputLabel,
   ListSubheader,
   MenuItem,
   Paper,
   Select,
+  Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, useFormik } from "formik";
 import SaveIcon from "@mui/icons-material/Save";
 import { sxMainContent, sxPaper } from "./styles";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useLoaderData } from "react-router-dom";
-
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -35,13 +38,21 @@ const MenuProps = {
   },
 };
 
-const API_URL = "https://interview-ken8.vercel.app";
+// const API_URL = "https://interview-ken8.vercel.app";
+const API_URL = "http://localhost:8080";
 
 const DetailsForm = () => {
   const data = useLoaderData();
   const [category1, category2, category3] = data;
+  const navigate = useNavigate();
 
   const theme = useTheme();
+
+  const [openTextField, setOpenTextfield] = useState(false);
+
+  const handleToggleTextField = () => {
+    setOpenTextfield(!openTextField);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -70,6 +81,20 @@ const DetailsForm = () => {
         .required("*Required"),
       selectors: Yup.array().min(1, "Select Atleast One Selector").required(),
       terms: Yup.boolean().oneOf([true]),
+    }),
+  });
+
+  const userIdFormik = useFormik({
+    initialValues: {
+      userId: "",
+    },
+    onSubmit: (values) => {
+      navigate(`/views/user/edit/${values.userId}`);
+    },
+    validationSchema: Yup.object({
+      userId: Yup.number()
+        .min(1, "Must be greater than 1")
+        .required("*Required"),
     }),
   });
 
@@ -134,7 +159,6 @@ const DetailsForm = () => {
         name="terms"
         id="terms"
         sx={{
-          my: 1,
           color:
             Boolean(formik.touched.terms) && Boolean(formik.errors.terms)
               ? theme.palette.error.main
@@ -155,11 +179,60 @@ const DetailsForm = () => {
         label="Agree to terms "
       />
 
-      <Box textAlign="center">
-        <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
+      <Collapse in={openTextField}>
+        <Stack direction="row" alignItems="baseline" spacing={2}>
+          <TextField
+            id="userId"
+            label="Enter your user id"
+            name="userId"
+            type="number"
+            margin="dense"
+            variant="standard"
+            value={userIdFormik.values.userId}
+            onChange={userIdFormik.handleChange}
+            onBlur={userIdFormik.handleBlur}
+            error={
+              Boolean(userIdFormik.touched.userId) &&
+              Boolean(userIdFormik.errors.userId)
+            }
+            helperText={
+              Boolean(userIdFormik.errors.name) && userIdFormik.errors.name
+            }
+          />
+          {openTextField && (
+            <IconButton
+              onClick={() => {
+                userIdFormik.handleReset();
+                handleToggleTextField();
+              }}
+            >
+              <HighlightOffIcon />
+            </IconButton>
+          )}
+        </Stack>
+      </Collapse>
+
+      <Stack sx={{ mt: 2 }} spacing={2} direction="row" justifyContent="center">
+        <Button
+          onClick={formik.handleSubmit}
+          variant="contained"
+          endIcon={<SaveIcon />}
+        >
           Save
         </Button>
-      </Box>
+        <Button
+          onClick={
+            !openTextField ? handleToggleTextField : userIdFormik.handleSubmit
+          }
+          component={Link}
+          to="#"
+          variant="outlined"
+          color="info"
+          endIcon={<SaveIcon />}
+        >
+          Edit
+        </Button>
+      </Stack>
     </form>
   );
 };
@@ -168,43 +241,27 @@ export const TermsPage = () => {
   const theme = useTheme();
 
   return (
-    <Grid
-      container
-      sx={{ height: "100vh" }}
-      direction={{ xs: "column-reverse", md: "column" }}
-    >
-      <Box sx={{ background: theme.palette.primary.main, flex: 1 }} />
-      <Box sx={{ flex: 1 }} />
-      <Grid
-        item
-        container
-        justifyContent="center"
-        alignItems="center"
-        sx={sxMainContent}
+    <>
+      <Typography
+        component={Paper}
+        variant="h6"
+        elevation={2}
+        sx={{
+          textTransform: "capitalize",
+          p: 2,
+          boxShadow: 1,
+          background: theme.palette.primary.main,
+          mb: 5,
+        }}
+        color="white"
+        textAlign="center"
       >
-        <Paper sx={sxPaper}>
-          <Typography
-            component={Paper}
-            variant="h6"
-            elevation={2}
-            sx={{
-              textTransform: "capitalize",
-              p: 2,
-              boxShadow: 1,
-              background: theme.palette.primary.main,
-              mb: 5,
-            }}
-            color="white"
-            textAlign="center"
-          >
-            Please enter your name and pick the Sectors you are currently
-            involved in
-          </Typography>
+        Please enter your name and pick the Sectors you are currently involved
+        in
+      </Typography>
 
-          <DetailsForm />
-        </Paper>
-      </Grid>
-    </Grid>
+      <DetailsForm />
+    </>
   );
 };
 
