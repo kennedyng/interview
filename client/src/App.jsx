@@ -14,7 +14,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        errorElement: <div>Something went wrong</div>,
+
+        errorElement: <div>Something went wrong: try page refresh</div>,
         loader: termsLoader,
         element: <TermsPage />,
       },
