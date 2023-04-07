@@ -1,3 +1,6 @@
+import { alpha } from "@mui/material";
+import { red, blue, green, indigo, cyan } from "@mui/material/colors";
+
 export const sxMainContent = {
   position: "absolute",
   height: "100vh",
@@ -7,6 +10,10 @@ export const sxMainContent = {
 
 export const sxPaper = {
   p: 4,
-  boxShadow: "4",
-  maxWidth: { xs: "95%", sm: 350, md: 450 },
+  boxShadow: "5",
+  "&.MuiPaper-root": {
+    background: { xs: "#ffff", md: alpha("#fff", 0.4) },
+  },
+
+  width: { xs: "95%", sm: 350, md: 450 },
 };
