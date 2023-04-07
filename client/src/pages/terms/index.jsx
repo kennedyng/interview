@@ -38,8 +38,7 @@ const MenuProps = {
   },
 };
 
-// const API_URL = "https://interview-ken8.vercel.app";
-const API_URL = "http://localhost:8080";
+const API_URL = "https://interview-ken8.vercel.app";
 
 const DetailsForm = () => {
   const data = useLoaderData();
