@@ -25,8 +25,12 @@ import EditIcon from "@mui/icons-material/Edit";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const DetailsForm = () => {
-  const data = useLoaderData();
+  const { data, userData } = useLoaderData();
+
   const [category1, category2, category3] = data;
+
+  console.log(userData);
+
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -39,9 +43,9 @@ const DetailsForm = () => {
     setAnchorEl(null);
   };
 
-  const handleItemClick = () => {
+  const handleItemClick = (userId) => {
     handleClose();
-    navigate(`/views/user/edit/${3}`);
+    navigate(`/views/user/edit/${userId}`);
   };
 
   const formik = useFormik({
@@ -184,9 +188,11 @@ const DetailsForm = () => {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem onClick={handleItemClick}>Profile</MenuItem>
-          <MenuItem onClick={handleItemClick}>My account</MenuItem>
-          <MenuItem onClick={handleItemClick}>Logout</MenuItem>
+          {userData.map(({ id, firstName, lastName }) => (
+            <MenuItem key={"user-id" + id} onClick={() => handleItemClick(id)}>
+              {id + " " + firstName + " " + (lastName ? lastName : "")}
+            </MenuItem>
+          ))}
         </Menu>
       </Stack>
     </form>

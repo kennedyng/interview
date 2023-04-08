@@ -21,9 +21,9 @@ import { toast } from "react-toastify";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const apiUrl = import.meta.env.VITE_API_URL;
 const EditDetailsForm = () => {
-  const data = useLoaderData();
-  const { userData } = data;
-  const [category1, category2, category3] = data.data;
+  const { data, userData } = useLoaderData();
+
+  const [category1, category2, category3] = data;
 
   const formik = useFormik({
     initialValues: {

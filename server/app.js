@@ -24,7 +24,11 @@ app.get("/data", async (req, res) => {
       },
     });
 
-    const userData = await prisma.user.findMany();
+    const userData = await prisma.user.findMany({
+      include: {
+        selectors: true,
+      },
+    });
     res.status(200).json({ data, userData });
   } catch (error) {
     console.log(error);
