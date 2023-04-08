@@ -12,7 +12,7 @@ const RootLayout = () => {
       sx={{ height: "100vh" }}
       direction={{ xs: "column-reverse", md: "row-reverse" }}
     >
-      <Box sx={{ background: theme.palette.primary.main, flex: 0.7 }} />
+      <Box sx={{ background: theme.palette.primary.main, flex: 0.6 }} />
       <Box sx={{ flex: 1 }} />
       <Grid
         item
