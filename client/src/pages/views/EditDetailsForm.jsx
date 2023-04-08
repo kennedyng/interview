@@ -12,19 +12,21 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 import * as Yup from "yup";
-
 import SaveIcon from "@mui/icons-material/Save";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const apiUrl = import.meta.env.VITE_API_URL;
+
 const EditDetailsForm = () => {
   const {
     data,
     userData: [userInfo],
   } = useLoaderData();
+
+  const { userId } = useParams();
 
   const [category1, category2, category3] = data;
 
@@ -38,7 +40,7 @@ const EditDetailsForm = () => {
     },
 
     onSubmit: async (values) => {
-      const posting = axios.patch(`${apiUrl}/user/update/details/3`, {
+      const posting = axios.patch(`${apiUrl}/user/update/details/${userId}`, {
         name: values.name,
         agreed: values.terms,
         selectors: values.selectors,

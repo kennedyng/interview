@@ -90,6 +90,31 @@ app.post("/user/create/details", async (req, res) => {
   }
 });
 
+app.patch("/user/update/details/:userId", async (req, res) => {
+  try {
+    created = await prisma.user.update({
+      data: {
+        firstName: req.body.name.split(" ")[0],
+        lastName: req.body.name.split(" ")[1],
+        selectors: {
+          create: req.body.selectors.map((selectors) => {
+            return {
+              name: selectors,
+            };
+          }),
+        },
+      },
+      where: {
+        id: Number(req.params.userId),
+      },
+    });
+    res.status(201).json({ message: "created successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json(500);
+  }
+});
+
 app.listen(process.env.PORT || port, () => {
   console.log(
     `Test App running at http://localhost:${process.env.PORT || port}`

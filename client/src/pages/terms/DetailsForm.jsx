@@ -174,7 +174,7 @@ const DetailsForm = () => {
           variant="contained"
           endIcon={<EditIcon />}
         >
-          Edit
+          Edit User
         </Button>
         <Menu
           id="fade-menu"
