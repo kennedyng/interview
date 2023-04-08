@@ -54,11 +54,13 @@ const DetailsForm = () => {
     },
 
     onSubmit: async (values) => {
-      const posting = axios.post(`${apiUrl}/user/create/details`, {
-        name: values.name,
-        agreed: values.terms,
-        selectors: values.selectors,
-      });
+      const posting = axios
+        .post(`${apiUrl}/user/create/details`, {
+          name: values.name,
+          agreed: values.terms,
+          selectors: values.selectors,
+        })
+        .then((res) => navigate("/"));
       toast.promise(
         posting,
         {
