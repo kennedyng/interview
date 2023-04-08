@@ -1,27 +1,26 @@
 import {
   Button,
   Checkbox,
-  Collapse,
+  Fade,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   InputLabel,
   ListSubheader,
+  Menu,
   MenuItem,
   Select,
   Stack,
   TextField,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import SaveIcon from "@mui/icons-material/Save";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import EditIcon from "@mui/icons-material/Edit";
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -31,10 +30,18 @@ const DetailsForm = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const [openTextField, setOpenTextfield] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleEditClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  const handleToggleTextField = () => {
-    setOpenTextfield(!openTextField);
+  const handleItemClick = () => {
+    handleClose();
+    navigate(`/views/user/edit/${3}`);
   };
 
   const formik = useFormik({
@@ -68,20 +75,6 @@ const DetailsForm = () => {
         .required("*Required"),
       selectors: Yup.array().min(1, "Select Atleast One Selector").required(),
       terms: Yup.boolean().oneOf([true]),
-    }),
-  });
-
-  const userIdFormik = useFormik({
-    initialValues: {
-      userId: "",
-    },
-    onSubmit: (values) => {
-      navigate(`/views/user/edit/${values.userId}`);
-    },
-    validationSchema: Yup.object({
-      userId: Yup.number()
-        .min(1, "Must be greater than 1")
-        .required("*Required"),
     }),
   });
 
@@ -166,39 +159,6 @@ const DetailsForm = () => {
         label="Agree to terms "
       />
 
-      <Collapse in={openTextField}>
-        <Stack direction="row" alignItems="baseline" spacing={2}>
-          <TextField
-            id="userId"
-            label="Enter your user id"
-            name="userId"
-            type="number"
-            margin="dense"
-            variant="standard"
-            value={userIdFormik.values.userId}
-            onChange={userIdFormik.handleChange}
-            onBlur={userIdFormik.handleBlur}
-            error={
-              Boolean(userIdFormik.touched.userId) &&
-              Boolean(userIdFormik.errors.userId)
-            }
-            helperText={
-              Boolean(userIdFormik.errors.name) && userIdFormik.errors.name
-            }
-          />
-          {openTextField && (
-            <IconButton
-              onClick={() => {
-                userIdFormik.handleReset();
-                handleToggleTextField();
-              }}
-            >
-              <HighlightOffIcon />
-            </IconButton>
-          )}
-        </Stack>
-      </Collapse>
-
       <Stack sx={{ mt: 2 }} spacing={2} direction="row" justifyContent="center">
         <Button
           onClick={formik.handleSubmit}
@@ -208,14 +168,26 @@ const DetailsForm = () => {
           Save
         </Button>
         <Button
-          onClick={
-            !openTextField ? handleToggleTextField : userIdFormik.handleSubmit
-          }
+          onClick={handleEditClick}
           variant="contained"
           endIcon={<EditIcon />}
         >
           Edit
         </Button>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            "aria-labelledby": "fade-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <MenuItem onClick={handleItemClick}>Profile</MenuItem>
+          <MenuItem onClick={handleItemClick}>My account</MenuItem>
+          <MenuItem onClick={handleItemClick}>Logout</MenuItem>
+        </Menu>
       </Stack>
     </form>
   );

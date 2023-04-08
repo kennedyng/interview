@@ -23,7 +23,9 @@ app.get("/data", async (req, res) => {
         },
       },
     });
-    res.status(200).json(data);
+
+    const userData = await prisma.user.findMany();
+    res.status(200).json({ data, userData });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "some thing went wrong" });
