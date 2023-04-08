@@ -12,7 +12,7 @@ export const sxPaper = {
   p: 4,
   boxShadow: "5",
   "&.MuiPaper-root": {
-    background: { xs: "#ffff", md: alpha("#fff", 0.4) },
+    background: { xs: "#ffff", md: alpha("#fff", 0.2) },
   },
 
   width: { xs: "95%", sm: 350, md: 450 },
