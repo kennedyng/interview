@@ -29,8 +29,6 @@ const DetailsForm = () => {
 
   const [category1, category2, category3] = data;
 
-  console.log(userData);
-
   const navigate = useNavigate();
   const theme = useTheme();
 
